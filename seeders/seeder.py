@@ -11,17 +11,21 @@ def run_seeder(engine):
 
     try:
         # Create articles
-        articles = seed_articles(Session)
-        article = articles[0]
+        articles = []
+        for i in range(2):
+            articles.extend(seed_articles(Session))
 
-        # Create comments
-        comments = seed_comments(Session)
+        for article in articles:
+            # Create comments
+            comments = seed_comments(Session)
 
-        # Associate comments with the article
-        article.comments = comments
+            # Associate comments with the article
+            article.comments = comments
 
-        # Add and commit the article (with comments)
-        session.add(article)
+        # Add and commit the articles (with comments)
+        for article in articles:
+            session.add(article)
+            
         session.commit()
 
         print(f"✓ Seeded article: '{article.title}'")

@@ -1,10 +1,12 @@
 services:
-  # Python FastAPI Backend
-  backend:
+  # Python FastAPI App
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: fastapi-backend
+    container_name: fastapi-app
+    stdin_open: true  # Enable interactive input
+    tty: true         # Allocate a pseudo-TTY
     env_file:
       - .env
     ports:
