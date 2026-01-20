@@ -1,0 +1,47 @@
+services:
+  # Python FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-backend
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fastapi-network
+    environment:
+      - DATABASE_URL=postgresql://fastapi_user:fastapi_password@postgres:5432/fastapi_db
+
+  # PostgreSQL Database
+  postgres:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: fastapi-postgres
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fastapi_user -d fastapi_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fastapi-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fastapi-network:
+    driver: bridge
