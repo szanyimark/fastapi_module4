@@ -1,4 +1,4 @@
-from models.article_comment_onetomany import Article
+from models import Article
 
 
 def seed_articles(Session):

@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from models.article_comment_onetomany import Base
+from models import Base, Article, Comment
 from seeders.seeder import run_seeder
 
 # Load environment variables from .env file
